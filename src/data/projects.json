@@ -1,0 +1,56 @@
+[
+  {
+    "id": "personal-hub",
+    "title": "Personal Hub",
+    "desc": "Vue 3+TS 个人中心，含收藏、6个工具、项目展示，部署于 GitHub Pages。",
+    "type": "个人",
+    "role": "独立开发",
+    "date": "2025.Q1",
+    "stack": ["Vue 3", "TypeScript", "Vite", "Pinia"],
+    "demo": "#",
+    "src": "#",
+    "filters": ["vue", "ts"],
+    "color1": "#7c6af7",
+    "color2": "#b8aeff"
+  },
+  {
+    "id": "devtools-pack",
+    "title": "DevTools Pack",
+    "desc": "纯前端工具集，图片压缩/转换、JSON 格式化、Base64 等 6 个工具，Canvas API 处理图片。",
+    "type": "个人",
+    "role": "独立开发",
+    "date": "2025.Q1",
+    "stack": ["Vue 3", "Vite", "Canvas API"],
+    "demo": "#",
+    "src": "#",
+    "filters": ["vue"],
+    "color1": "#34a853",
+    "color2": "#86efac"
+  },
+  {
+    "id": "admin-dashboard",
+    "title": "后台管理系统",
+    "desc": "企业级后台，封装权限路由、动态菜单、ECharts 数据可视化，实习项目主力开发。",
+    "type": "实习",
+    "role": "前端主力",
+    "date": "2024.Q3",
+    "stack": ["Vue 3", "TypeScript", "ECharts", "Element Plus"],
+    "demo": "#",
+    "src": "#",
+    "filters": ["vue", "ts", "fullstack"]
+  },
+  {
+    "id": "mini-react",
+    "title": "Mini React",
+    "desc": "从零实现简版 React，Fiber 架构、并发更新、Hooks 核心特性，约 2000 行 TypeScript。",
+    "type": "练习",
+    "role": "独立实现",
+    "date": "2024.Q2",
+    "stack": ["TypeScript", "Rollup", "Jest"],
+    "demo": "#",
+    "src": "#",
+    "filters": ["ts"],
+    "color1": "#f76a7c",
+    "color2": "#fda4af"
+  }
+]

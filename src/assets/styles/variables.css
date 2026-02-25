@@ -1,0 +1,55 @@
+/* Design tokens from frame-design-vue3-personal-hub.html */
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', monospace;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-io: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] {
+  --bg: #0a0a0b;
+  --bg2: #111114;
+  --bg3: #18181c;
+  --surface: #1e1e24;
+  --surface2: #252530;
+  --surface3: #2c2c38;
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.12);
+  --border3: rgba(255, 255, 255, 0.18);
+  --text: #f0efe8;
+  --text2: #888892;
+  --text3: #555560;
+  --accent: #7c6af7;
+  --aglow: rgba(124, 106, 247, 0.28);
+  --a2: #3ecf8e;
+  --a3: #f7c26a;
+  --a4: #f76a7c;
+  --tbg: rgba(124, 106, 247, 0.12);
+  --tcolor: #a597ff;
+  --nav: rgba(10, 10, 11, 0.9);
+}
+
+[data-theme='light'] {
+  --bg: #f2f1ed;
+  --bg2: #eae9e4;
+  --bg3: #e0dfd9;
+  --surface: #ffffff;
+  --surface2: #f8f7f3;
+  --surface3: #f0efe9;
+  --border: rgba(0, 0, 0, 0.07);
+  --border2: rgba(0, 0, 0, 0.12);
+  --border3: rgba(0, 0, 0, 0.18);
+  --text: #1a1a20;
+  --text2: #666672;
+  --text3: #aaaaaa;
+  --accent: #5b48f0;
+  --aglow: rgba(91, 72, 240, 0.16);
+  --a2: #1fa870;
+  --a3: #d4960a;
+  --a4: #e83f52;
+  --tbg: rgba(91, 72, 240, 0.08);
+  --tcolor: #5b48f0;
+  --nav: rgba(242, 241, 237, 0.9);
+}
