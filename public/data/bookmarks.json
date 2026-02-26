@@ -1,0 +1,9 @@
+{
+  "items": [],
+  "folders": [
+    { "id": "vue", "name": "Vue 生态", "order": 0 },
+    { "id": "ts", "name": "TypeScript", "order": 1 },
+    { "id": "perf", "name": "性能优化", "order": 2 },
+    { "id": "other", "name": "其他", "order": 3 }
+  ]
+}

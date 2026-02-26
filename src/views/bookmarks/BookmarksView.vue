@@ -3,18 +3,31 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useBookmarksStore } from '@/stores/bookmarks'
 import { useToast } from '@/composables/useToast'
+import { usePublicBookmarks } from '@/composables/usePublicBookmarks'
 import type { BookmarkType } from '@/types/bookmarks'
 
 const { t } = useI18n()
 const toast = useToast()
 const store = useBookmarksStore()
+const publicBookmarks = usePublicBookmarks()
 
+const activeTab = ref<'public' | 'mine'>('public')
 const search = ref('')
 const typeFilter = ref<BookmarkType | 'all'>('all')
 const folderId = ref<string | null>(null)
 
+const currentItems = computed(() =>
+  activeTab.value === 'public' ? [...publicBookmarks.items.value] : store.items
+)
+const currentFolders = computed(() =>
+  activeTab.value === 'public' ? [...publicBookmarks.folders.value] : store.folders
+)
+
+const publicLoading = computed(() => publicBookmarks.loading.value)
+const publicError = computed(() => publicBookmarks.error.value)
+
 const filteredList = computed(() => {
-  let list = store.items
+  let list = currentItems.value
   if (typeFilter.value !== 'all') list = list.filter((b) => b.type === typeFilter.value)
   if (folderId.value) list = list.filter((b) => b.folderId === folderId.value)
   if (search.value.trim()) {
@@ -162,6 +175,20 @@ function exportJson() {
   toast.show('📁 ' + t('toast.exported'))
 }
 
+/** 导出为与 data/bookmarks.json 同结构的全站公开 JSON，供站长替换仓库文件后 push */
+function exportPublicJson() {
+  const payload = { items: store.items, folders: store.folders }
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: 'application/json',
+  })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = 'bookmarks.json'
+  a.click()
+  URL.revokeObjectURL(a.href)
+  toast.show('📤 ' + t('toast.exported'))
+}
+
 function triggerImport(type: 'json' | 'html') {
   const input = document.createElement('input')
   input.type = 'file'
@@ -247,6 +274,14 @@ const typeIcons: Record<BookmarkType, string> = {
         <h2>{{ t('bookmarks.title') }}</h2>
         <p>{{ t('bookmarks.desc') }}</p>
       </div>
+      <div class="bookmarks-tabs">
+        <button type="button" class="ftab" :class="{ on: activeTab === 'public' }" @click="activeTab = 'public'">
+          {{ t('bookmarks.tabPublic') }}
+        </button>
+        <button type="button" class="ftab" :class="{ on: activeTab === 'mine' }" @click="activeTab = 'mine'">
+          {{ t('bookmarks.tabMine') }}
+        </button>
+      </div>
       <div class="tb">
         <div class="sw">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -274,16 +309,31 @@ const typeIcons: Record<BookmarkType, string> = {
             {{ t('bookmarks.other') }}
           </button>
         </div>
-        <div class="tb-actions">
+        <template v-if="activeTab === 'public'">
+          <button type="button" class="sbtn" :disabled="publicLoading" @click="publicBookmarks.refresh">
+            {{ publicLoading ? '…' : '↻' }} {{ t('bookmarks.refresh') }}
+          </button>
+        </template>
+        <div v-else class="tb-actions">
           <button type="button" class="sbtn" @click="openAdd">＋ {{ t('bookmarks.add') }}</button>
           <button type="button" class="sbtn" @click="exportJson">⬇ {{ t('bookmarks.export') }}</button>
+          <button type="button" class="sbtn" @click="exportPublicJson">📤 {{ t('bookmarks.exportPublicJson') }}</button>
           <button type="button" class="sbtn" @click="triggerImport('json')">{{ t('bookmarks.import') }} JSON</button>
           <button type="button" class="sbtn" @click="triggerImport('html')">{{ t('bookmarks.importBrowser') }}</button>
         </div>
       </div>
     </div>
 
-    <div v-if="formOpen" class="aform open">
+    <div v-if="activeTab === 'public' && publicLoading" class="empty-state">
+      <span class="em">⏳</span> 加载中…
+    </div>
+    <div v-else-if="activeTab === 'public' && publicError" class="empty-state">
+      <span class="em">⚠️</span> {{ t('bookmarks.publicLoadError') }}：{{ publicError }}
+      <br />
+      <button type="button" class="sbtn" style="margin-top: 8px" @click="publicBookmarks.refresh">{{ t('bookmarks.refresh') }}</button>
+    </div>
+
+    <div v-if="activeTab === 'mine' && formOpen" class="aform open">
       <div class="fg">
         <div class="ff">
           <label>{{ t('bookmarks.formTitle') }} *</label>
@@ -330,7 +380,7 @@ const typeIcons: Record<BookmarkType, string> = {
         全部
       </button>
       <button
-        v-for="f in store.folders"
+        v-for="f in currentFolders"
         :key="f.id"
         type="button"
         class="fchip"
@@ -340,10 +390,10 @@ const typeIcons: Record<BookmarkType, string> = {
         <span class="fdot" :style="{ background: 'var(--a2)' }" />
         {{ f.name }}
       </button>
-      <button type="button" class="sbtn" @click="openFolderManage">管理文件夹</button>
+      <button v-if="activeTab === 'mine'" type="button" class="sbtn" @click="openFolderManage">管理文件夹</button>
     </div>
 
-    <div v-if="folderManageOpen" class="aform open folder-manage">
+    <div v-if="activeTab === 'mine' && folderManageOpen" class="aform open folder-manage">
       <div class="folder-manage-h">文件夹管理</div>
       <div class="folder-list">
         <div v-for="f in store.folders" :key="f.id" class="folder-row">
@@ -380,35 +430,47 @@ const typeIcons: Record<BookmarkType, string> = {
       </div>
     </div>
 
-    <div v-if="filteredList.length === 0" class="empty-state">
-      <span class="em">🔍</span>
-      {{ t('bookmarks.empty') }}<br />
-      {{ t('bookmarks.emptyHint') }}
-    </div>
-    <div v-else class="bklist">
-      <div
-        v-for="(b, i) in filteredList"
-        :key="b.id"
-        class="bkitem"
-        :style="{ animationDelay: `${i * 0.035}s` }"
-      >
-        <div class="bk-fav">{{ typeIcons[b.type] }}</div>
-        <div class="bk-info">
-          <a :href="b.url" target="_blank" rel="noopener noreferrer" class="bk-title">{{ b.title }}</a>
-          <div class="bk-url">{{ b.url }}</div>
-        </div>
-        <div class="bk-tags">
-          <span v-for="tag in b.tags" :key="tag" class="bk-tag">{{ tag }}</span>
-        </div>
-        <span class="tbadge" :class="`t-${b.type}`">{{ t(typeLabels[b.type]) }}</span>
-        <button type="button" class="sbtn small" @click="openEdit(b)" aria-label="Edit">✎</button>
-        <button type="button" class="sbtn small" @click="remove(b.id)" aria-label="Delete">×</button>
+    <template v-if="!(activeTab === 'public' && (publicLoading || publicError))">
+      <div v-if="filteredList.length === 0" class="empty-state">
+        <span class="em">🔍</span>
+        {{ t('bookmarks.empty') }}<br />
+        {{ t('bookmarks.emptyHint') }}
       </div>
-    </div>
+      <div v-else class="bklist">
+        <div
+          v-for="(b, i) in filteredList"
+          :key="b.id"
+          class="bkitem"
+          :style="{ animationDelay: `${i * 0.035}s` }"
+        >
+          <div class="bk-fav">{{ typeIcons[b.type] }}</div>
+          <div class="bk-info">
+            <a :href="b.url" target="_blank" rel="noopener noreferrer" class="bk-title">{{ b.title }}</a>
+            <div class="bk-url">{{ b.url }}</div>
+          </div>
+          <div class="bk-tags">
+            <span v-for="tag in b.tags" :key="tag" class="bk-tag">{{ tag }}</span>
+          </div>
+          <span class="tbadge" :class="`t-${b.type}`">{{ t(typeLabels[b.type as BookmarkType]) }}</span>
+          <template v-if="activeTab === 'mine'">
+            <button type="button" class="sbtn small" @click="openEdit(b)" aria-label="Edit">✎</button>
+            <button type="button" class="sbtn small" @click="remove(b.id)" aria-label="Delete">×</button>
+          </template>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <style scoped>
+.bookmarks-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.bookmarks-tabs .ftab {
+  padding: 8px 16px;
+}
 .tb {
   display: flex;
   gap: 7px;
