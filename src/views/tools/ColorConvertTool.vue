@@ -298,4 +298,20 @@ onMounted(() => setHex(hexInput.value))
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .cpresets {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .preset-dot {
+    min-width: 36px;
+    min-height: 36px;
+  }
+  .cpbtn,
+  .cvrow {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+}
 </style>

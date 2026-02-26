@@ -105,4 +105,14 @@ const { t } = useI18n()
     transform: none;
   }
 }
+
+@media (max-width: 600px) {
+  .tgrid {
+    grid-template-columns: 1fr;
+  }
+  .tcard {
+    padding: 20px;
+    min-height: 44px;
+  }
+}
 </style>

@@ -516,4 +516,24 @@ function reset() {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .upzone {
+    padding: 28px 16px;
+  }
+  .up-title {
+    font-size: 13px;
+  }
+  .fmt-row {
+    flex-wrap: wrap;
+  }
+  .fmtbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+  .dact .sbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+}
 </style>

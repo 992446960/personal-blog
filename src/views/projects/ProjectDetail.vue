@@ -150,4 +150,39 @@ function goBack() {
   font-family: var(--font-mono);
   font-size: 12px;
 }
+
+@media (max-width: 600px) {
+  .detail-header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .detail-header .sbtn {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+  .pcov.large {
+    margin-left: -12px;
+    margin-right: -12px;
+    border-radius: 12px;
+    height: 160px;
+  }
+  .pbody.large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .detail-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .detail-content :deep(pre) {
+    max-width: 100%;
+  }
+  .plinks {
+    flex-wrap: wrap;
+  }
+  .plink {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+}
 </style>

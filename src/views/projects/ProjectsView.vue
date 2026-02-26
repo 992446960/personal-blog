@@ -300,4 +300,28 @@ const filterOptions = [
     transform: none;
   }
 }
+
+@media (max-width: 600px) {
+  .pgrid {
+    grid-template-columns: 1fr;
+  }
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ftabs {
+    flex-wrap: wrap;
+  }
+  .ftab {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+  .plinks {
+    flex-wrap: wrap;
+  }
+  .plink {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+}
 </style>

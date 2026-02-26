@@ -297,4 +297,41 @@ function download(item: { name: string; dataUrl: string }) {
   background: var(--tbg);
   color: var(--tcolor);
 }
+
+@media (max-width: 600px) {
+  .upzone {
+    padding: 28px 16px;
+  }
+  .up-title {
+    font-size: 13px;
+  }
+  .up-sub {
+    font-size: 12px;
+  }
+  .fmt-row {
+    flex-wrap: wrap;
+  }
+  .fmtbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+  .cv-item {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .cv-item .bk-info {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .cv-item .bk-title,
+  .cv-item .bk-url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cv-item .sbtn {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+}
 </style>

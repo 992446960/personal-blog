@@ -234,4 +234,21 @@ onMounted(() => {
 .fi.dt-input:focus {
   border-color: var(--accent);
 }
+
+@media (max-width: 600px) {
+  .ts-biginput {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+  }
+  .fi.dt-input {
+    min-width: 0;
+    width: 100%;
+  }
+  .ts-actions .sbtn,
+  .dt-row .sbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+}
 </style>

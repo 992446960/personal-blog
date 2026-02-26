@@ -274,10 +274,12 @@ const typeIcons: Record<BookmarkType, string> = {
             {{ t('bookmarks.other') }}
           </button>
         </div>
-        <button type="button" class="sbtn" @click="openAdd">＋ {{ t('bookmarks.add') }}</button>
-        <button type="button" class="sbtn" @click="exportJson">⬇ {{ t('bookmarks.export') }}</button>
-        <button type="button" class="sbtn" @click="triggerImport('json')">{{ t('bookmarks.import') }} JSON</button>
-        <button type="button" class="sbtn" @click="triggerImport('html')">{{ t('bookmarks.importBrowser') }}</button>
+        <div class="tb-actions">
+          <button type="button" class="sbtn" @click="openAdd">＋ {{ t('bookmarks.add') }}</button>
+          <button type="button" class="sbtn" @click="exportJson">⬇ {{ t('bookmarks.export') }}</button>
+          <button type="button" class="sbtn" @click="triggerImport('json')">{{ t('bookmarks.import') }} JSON</button>
+          <button type="button" class="sbtn" @click="triggerImport('html')">{{ t('bookmarks.importBrowser') }}</button>
+        </div>
       </div>
     </div>
 
@@ -414,6 +416,13 @@ const typeIcons: Record<BookmarkType, string> = {
   align-items: center;
 }
 
+.tb-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .sw {
   display: flex;
   align-items: center;
@@ -423,6 +432,7 @@ const typeIcons: Record<BookmarkType, string> = {
   border-radius: 9px;
   padding: 8px 13px;
   width: 210px;
+  min-width: 0;
   transition: all 0.15s;
 }
 
@@ -748,6 +758,92 @@ const typeIcons: Record<BookmarkType, string> = {
   padding: 4px 9px;
   font-size: 11px;
   flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .tb {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .tb-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .tb-actions .sbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+  .sw {
+    width: 100%;
+    max-width: 100%;
+  }
+  .ftabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .ftab {
+    min-height: 44px;
+    padding: 12px 8px;
+    font-size: 12px;
+    text-align: center;
+  }
+  .fchip {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+  .fbar .sbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+    flex: 1 1 100%;
+  }
+  .bkitem {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .bk-info {
+    flex: 1 1 100%;
+    min-width: 0;
+    order: 1;
+  }
+  .bk-tags {
+    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .tbadge {
+    order: 3;
+  }
+  .bkitem .sbtn.small {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    order: 4;
+  }
+  .folder-manage .fi,
+  .folder-manage .fsel,
+  .folder-delete .fsel {
+    max-width: 100%;
+    width: 100%;
+  }
+  .folder-name-inp {
+    max-width: 100%;
+  }
+  .folder-add .folder-name-inp {
+    max-width: 100%;
+  }
+  .fa {
+    flex-wrap: wrap;
+  }
+  .fa .sbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
 }
 
 @keyframes bkIn {

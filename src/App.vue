@@ -25,7 +25,7 @@ provide(TOAST_KEY, toastApi)
 <template>
   <div id="app-wrap">
     <AppNav />
-    <main class="main-wrap" style="padding-top: 58px; min-height: 100vh">
+    <main class="main-wrap">
       <router-view v-slot="{ Component }">
         <transition name="page" mode="out-in">
           <component :is="Component" />
@@ -49,6 +49,15 @@ provide(TOAST_KEY, toastApi)
   min-height: 100vh;
 }
 
+.main-wrap {
+  padding-top: calc(58px + env(safe-area-inset-top, 0px));
+  min-height: 100vh;
+}
+
+body.nav-drawer-open {
+  overflow: hidden;
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -66,7 +75,7 @@ provide(TOAST_KEY, toastApi)
 
 .toast-el {
   position: fixed;
-  bottom: 28px;
+  bottom: max(28px, env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%) translateY(16px);
   background: var(--surface3);

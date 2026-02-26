@@ -204,4 +204,19 @@ onMounted(() => format())
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .dta {
+    min-height: 120px;
+    font-size: 13px;
+  }
+  .dres {
+    font-size: 13px;
+    min-height: 80px;
+  }
+  .cpbtn {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+}
 </style>

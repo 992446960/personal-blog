@@ -204,7 +204,12 @@ const projectCount = 4
 
 .btn-p,
 .btn-s {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 20px;
+  box-sizing: border-box;
 }
 
 .hero-card {
@@ -486,6 +491,15 @@ const projectCount = 4
   .mod-sec {
     padding-left: 16px;
     padding-right: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 48px 16px 36px;
+  }
+  .mod-sec {
+    padding: 36px 16px 52px;
   }
 }
 </style>
