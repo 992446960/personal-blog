@@ -58,4 +58,12 @@ export const toolsConfig: ToolConfig[] = [
     path: '/tools/image-convert',
     component: () => import('@/views/tools/ImageConvertTool.vue'),
   },
+  {
+    id: 'cipher',
+    nameKey: 'tools.cipher.name',
+    descriptionKey: 'tools.cipher.desc',
+    icon: '🔐',
+    path: '/tools/cipher',
+    component: () => import('@/views/tools/CipherTool.vue'),
+  },
 ]
