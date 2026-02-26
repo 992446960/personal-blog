@@ -3,9 +3,13 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from '@/composables/useToast'
 import { encrypt, decrypt } from '@/composables/useCipher'
+import { mapEncode, mapDecode, MapEncodeError } from '@/utils/mapEncode'
 
 const { t } = useI18n()
 const toast = useToast()
+
+type CipherMode = 'password' | 'mapping'
+const mode = ref<CipherMode>('password')
 
 const plaintext = ref('')
 const encryptPassword = ref('')
@@ -17,6 +21,17 @@ const decryptPassword = ref('')
 const decryptResult = ref('')
 const decryptError = ref(false)
 const decrypting = ref(false)
+
+const mapPlaintext = ref('')
+const mapAlphabetEncode = ref('')
+const mapEncodedResult = ref('')
+const mapEncodeError = ref(false)
+const mapEncodedInput = ref('')
+const mapAlphabetDecode = ref('')
+const mapDecodedResult = ref('')
+const mapDecodeError = ref(false)
+const mapEncoding = ref(false)
+const mapDecoding = ref(false)
 
 async function doEncrypt() {
   if (!encryptPassword.value.trim()) {
@@ -76,6 +91,65 @@ function copyDecryptResult() {
   }
 }
 
+function doMapEncode() {
+  const alphabet = mapAlphabetEncode.value.trim()
+  if (!alphabet) {
+    toast.show(t('cipher.needAlphabet'))
+    return
+  }
+  mapEncoding.value = true
+  mapEncodedResult.value = ''
+  mapEncodeError.value = false
+  try {
+    mapEncodedResult.value = mapEncode(mapPlaintext.value, alphabet)
+  } catch (e) {
+    mapEncodedResult.value =
+      e instanceof MapEncodeError ? t('cipher.invalidAlphabet') : (e instanceof Error ? e.message : String(e))
+    mapEncodeError.value = true
+  } finally {
+    mapEncoding.value = false
+  }
+}
+
+function doMapDecode() {
+  const alphabet = mapAlphabetDecode.value.trim()
+  if (!alphabet) {
+    toast.show(t('cipher.needAlphabet'))
+    return
+  }
+  if (!mapEncodedInput.value.trim()) {
+    toast.show(t('cipher.needCiphertext'))
+    return
+  }
+  mapDecoding.value = true
+  mapDecodedResult.value = ''
+  mapDecodeError.value = false
+  try {
+    mapDecodedResult.value = mapDecode(mapEncodedInput.value, alphabet)
+  } catch {
+    mapDecodedResult.value = t('cipher.mapDecodeFailed')
+    mapDecodeError.value = true
+  } finally {
+    mapDecoding.value = false
+  }
+}
+
+function copyMapEncodedResult() {
+  if (mapEncodedResult.value && !mapEncodeError.value) {
+    navigator.clipboard.writeText(mapEncodedResult.value).then(() =>
+      toast.show('✅ ' + t('common.copied'))
+    )
+  }
+}
+
+function copyMapDecodedResult() {
+  if (mapDecodedResult.value && !mapDecodeError.value) {
+    navigator.clipboard.writeText(mapDecodedResult.value).then(() =>
+      toast.show('✅ ' + t('common.copied'))
+    )
+  }
+}
+
 function clearAll() {
   plaintext.value = ''
   encryptPassword.value = ''
@@ -84,16 +158,43 @@ function clearAll() {
   decryptPassword.value = ''
   decryptResult.value = ''
   decryptError.value = false
+  mapPlaintext.value = ''
+  mapAlphabetEncode.value = ''
+  mapEncodedResult.value = ''
+  mapEncodedInput.value = ''
+  mapAlphabetDecode.value = ''
+  mapDecodedResult.value = ''
+  mapDecodeError.value = false
+  mapEncodeError.value = false
 }
 </script>
 
 <template>
   <div class="page-content">
     <div class="tool-panel">
-      <div class="dgrid">
-        <div class="darea">
-          <div class="dlabel">
-            {{ t('cipher.plaintext') }}
+      <div class="mode-tabs">
+        <button
+          type="button"
+          class="mode-tab"
+          :class="{ active: mode === 'password' }"
+          @click="mode = 'password'"
+        >
+          {{ t('cipher.modePassword') }}
+        </button>
+        <button
+          type="button"
+          class="mode-tab"
+          :class="{ active: mode === 'mapping' }"
+          @click="mode = 'mapping'"
+        >
+          {{ t('cipher.modeMapping') }}
+        </button>
+      </div>
+      <template v-if="mode === 'password'">
+        <div class="dgrid">
+          <div class="darea">
+            <div class="dlabel">
+              {{ t('cipher.plaintext') }}
             <span class="dlabel-actions">
               <button
                 type="button"
@@ -178,6 +279,97 @@ function clearAll() {
           <div class="dres" :class="{ err: decryptError }">{{ decryptResult }}</div>
         </div>
       </div>
+      </template>
+      <template v-else>
+        <div class="dgrid">
+          <div class="darea">
+            <div class="dlabel">
+              {{ t('cipher.plaintext') }}
+              <span class="dlabel-actions">
+                <button
+                  type="button"
+                  class="cpbtn"
+                  :disabled="mapEncoding"
+                  @click="doMapEncode"
+                >
+                  {{ mapEncoding ? t('cipher.encoding') : t('cipher.encode') }}
+                </button>
+              </span>
+            </div>
+            <textarea
+              v-model="mapPlaintext"
+              class="dta"
+              rows="4"
+              :placeholder="t('cipher.plaintextPlaceholder')"
+            />
+            <div class="dpass">
+              <label class="dpass-label">{{ t('cipher.alphabet') }}</label>
+              <input
+                v-model="mapAlphabetEncode"
+                type="text"
+                class="dpass-input"
+                :placeholder="t('cipher.alphabetPlaceholder')"
+                autocomplete="off"
+              />
+            </div>
+            <div class="dlabel dlabel-out">
+              {{ t('cipher.encodedOutput') }}
+              <button
+                type="button"
+                class="cpbtn"
+                :disabled="!mapEncodedResult || mapEncodeError"
+                @click="copyMapEncodedResult"
+              >
+                {{ t('common.copy') }}
+              </button>
+            </div>
+            <div class="dres" :class="{ err: mapEncodeError }">{{ mapEncodedResult }}</div>
+          </div>
+          <div class="darea">
+            <div class="dlabel">
+              {{ t('cipher.encodedInput') }}
+              <span class="dlabel-actions">
+                <button
+                  type="button"
+                  class="cpbtn"
+                  :disabled="mapDecoding"
+                  @click="doMapDecode"
+                >
+                  {{ mapDecoding ? t('cipher.decoding') : t('cipher.decode') }}
+                </button>
+              </span>
+            </div>
+            <textarea
+              v-model="mapEncodedInput"
+              class="dta"
+              rows="4"
+              :placeholder="t('cipher.ciphertextPlaceholder')"
+            />
+            <div class="dpass">
+              <label class="dpass-label">{{ t('cipher.alphabet') }}</label>
+              <input
+                v-model="mapAlphabetDecode"
+                type="text"
+                class="dpass-input"
+                :placeholder="t('cipher.alphabetPlaceholder')"
+                autocomplete="off"
+              />
+            </div>
+            <div class="dlabel dlabel-out">
+              {{ t('cipher.decodedOutput') }}
+              <button
+                type="button"
+                class="cpbtn"
+                :disabled="!mapDecodedResult || mapDecodeError"
+                @click="copyMapDecodedResult"
+              >
+                {{ t('common.copy') }}
+              </button>
+            </div>
+            <div class="dres" :class="{ err: mapDecodeError }">{{ mapDecodedResult }}</div>
+          </div>
+        </div>
+      </template>
       <div class="dact">
         <button type="button" class="sbtn" @click="clearAll">
           {{ t('common.clear') }}
@@ -193,6 +385,35 @@ function clearAll() {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 22px;
+}
+
+.mode-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mode-tab {
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--text2);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.mode-tab:hover {
+  color: var(--text);
+}
+
+.mode-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
 .dgrid {
