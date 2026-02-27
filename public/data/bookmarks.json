@@ -1,9 +1,49 @@
 {
-  "items": [],
+  "items": [
+    {
+      "title": "人工智能驱动的客户发现",
+      "url": "https://zenith.chat",
+      "type": "article",
+      "folderId": "other",
+      "tags": [],
+      "id": 1772093296135,
+      "createdAt": 1772093296135
+    },
+    {
+      "title": "skills合集",
+      "url": "https://ai.codefather.cn/skills",
+      "type": "article",
+      "folderId": "other",
+      "tags": [],
+      "id": 1772014522048,
+      "createdAt": 1772014522048
+    }
+  ],
   "folders": [
-    { "id": "vue", "name": "Vue 生态", "order": 0 },
-    { "id": "ts", "name": "TypeScript", "order": 1 },
-    { "id": "perf", "name": "性能优化", "order": 2 },
-    { "id": "other", "name": "其他", "order": 3 }
+    {
+      "id": "vue",
+      "name": "Vue 生态",
+      "order": 0
+    },
+    {
+      "id": "ts",
+      "name": "TypeScript",
+      "order": 1
+    },
+    {
+      "id": "perf",
+      "name": "性能优化",
+      "order": 2
+    },
+    {
+      "id": "other",
+      "name": "其他",
+      "order": 3
+    },
+    {
+      "id": "f_1772174169249",
+      "name": "AI",
+      "order": 4
+    }
   ]
 }

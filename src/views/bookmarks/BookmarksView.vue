@@ -324,6 +324,10 @@ const typeIcons: Record<BookmarkType, string> = {
       </div>
     </div>
 
+    <p v-if="activeTab === 'mine'" class="local-only-hint">
+      <span aria-hidden="true">💾</span> {{ t('bookmarks.localOnlyHint') }}
+    </p>
+
     <div v-if="activeTab === 'public' && publicLoading" class="empty-state">
       <span class="em">⏳</span> 加载中…
     </div>
@@ -471,6 +475,18 @@ const typeIcons: Record<BookmarkType, string> = {
 .bookmarks-tabs .ftab {
   padding: 8px 16px;
 }
+
+.local-only-hint {
+  font-size: 0.875rem;
+  color: var(--text2);
+  margin: 0 0 12px;
+  padding: 6px 0;
+  line-height: 1.45;
+}
+.local-only-hint span {
+  margin-right: 6px;
+}
+
 .tb {
   display: flex;
   gap: 7px;
