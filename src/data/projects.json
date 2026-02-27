@@ -8,7 +8,7 @@
     "date": "2025.Q1",
     "stack": ["Vue 3", "TypeScript", "Vite", "Pinia"],
     "demo": "#",
-    "src": "#",
+    "src": "https://github.com/992446960/personal-blog/tree/main",
     "filters": ["vue", "ts"],
     "color1": "#7c6af7",
     "color2": "#b8aeff"
@@ -22,7 +22,7 @@
     "date": "2025.Q1",
     "stack": ["Vue 3", "Vite", "Canvas API"],
     "demo": "#",
-    "src": "#",
+    "src": "https://github.com/992446960/personal-blog/tree/main",
     "filters": ["vue"],
     "color1": "#34a853",
     "color2": "#86efac"
@@ -36,7 +36,7 @@
     "date": "2024.Q3",
     "stack": ["Vue 3", "TypeScript", "ECharts", "Element Plus"],
     "demo": "#",
-    "src": "#",
+    "src": "https://github.com/992446960/personal-blog/tree/main",
     "filters": ["vue", "ts", "fullstack"]
   },
   {
@@ -48,7 +48,7 @@
     "date": "2024.Q2",
     "stack": ["TypeScript", "Rollup", "Jest"],
     "demo": "#",
-    "src": "#",
+    "src": "https://github.com/992446960/personal-blog/tree/main",
     "filters": ["ts"],
     "color1": "#f76a7c",
     "color2": "#fda4af"
